@@ -21,29 +21,45 @@
     <main class="content">
         <!-- Anos e Semestres -->
         <div id="semestres">
-            <h2>1º Ano</h2>
+            <h2>🎓 1º Ano</h2>
             <section class="grid" id="ano1">
-                <div class="card" onclick="abrirSemestre('1.1')">1º Semestre</div>
-                <div class="card" onclick="abrirSemestre('2.1')">2º Semestre</div>
+                <div class="card" onclick="abrirSemestre('1.1')">
+                    <div class="card-icon">📚</div>
+                    1º Semestre
+                </div>
+                <div class="card" onclick="abrirSemestre('2.1')">
+                    <div class="card-icon">📖</div>
+                    2º Semestre
+                </div>
             </section>
 
-            <h2>2º Ano</h2>
+            <h2>🎯 2º Ano</h2>
             <section class="grid" id="ano2">
-                <div class="card" onclick="abrirSemestre('1.2')">1º Semestre</div>
-                <div class="card" onclick="abrirSemestre('2.2')">2º Semestre</div>
+                <div class="card" onclick="abrirSemestre('1.2')">
+                    <div class="card-icon">💻</div>
+                    1º Semestre
+                </div>
+                <div class="card" onclick="abrirSemestre('2.2')">
+                    <div class="card-icon">⚡</div>
+                    2º Semestre
+                </div>
             </section>
 
-            <h2>3º Ano</h2>
+            <h2>🚀 3º Ano</h2>
             <section class="grid" id="ano3">
-                <div class="card" onclick="abrirSemestre('1.3')">1º Semestre</div>
-                <div class="card" onclick="abrirSemestre('2.3')">2º Semestre</div>
+                <div class="card" onclick="abrirSemestre('1.3')">
+                    <div class="card-icon">🎯</div>
+                    1º Semestre
+                </div>
+                <div class="card" onclick="abrirSemestre('2.3')">
+                    <div class="card-icon">🏆</div>
+                    2º Semestre
+                </div>
             </section>
         </div>
 
         <!-- Disciplinas -->
         <section class="grid hidden" id="disciplinas"></section>
-        <button class="hidden voltar-btn" onclick="voltarParaSemestres()">← Voltar</button>
-
 
         <!-- Quiz Wrapper -->
         <section id="quiz-wrapper" class="hidden" style="display: flex; gap: 30px; align-items: flex-start;">

@@ -1,49 +1,97 @@
 body {
     font-family: 'Inter', sans-serif;
     margin: 0;
-    background-color: var(--bg-color);
+    background: var(--bg-gradient);
     color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
+    transition: all 0.3s ease;
+    min-height: 100vh;
 }
 
 header {
     position: relative;
-    background-color: #2e3a59;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 20px;
+    padding: 30px 20px;
     text-align: center;
-    font-size: 1.8em;
+    font-size: 2em;
     overflow: visible;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+header h1 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .content {
-    padding: 30px;
+    padding: 40px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
 }
 
 #disciplinas.grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .card {
-    background-color: var(--card-bg);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    padding: 35px 25px;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
     text-align: center;
     font-weight: 600;
+    font-size: 1.1em;
     cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--card-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
 }
 
 .card:hover {
-    background-color: var(--card-hover-bg);
-    transform: translateY(-4px);
+    background: var(--card-hover-bg);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--card-hover-shadow);
+}
+
+/* Estilos para os ícones dos cards */
+.card-icon {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    display: block;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
 }
 
 .hidden {
@@ -51,105 +99,166 @@ header {
 }
 
 h2 {
-    margin-top: 40px;
-    font-size: 1.6em;
-    color: #2e3a59;
+    margin: 50px 0 20px 0;
+    font-size: 2em;
+    color: var(--heading-color);
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--accent-gradient);
+    border-radius: 2px;
 }
 
 .voltar-btn {
-    margin-top: 30px;
-    padding: 12px 20px;
-    font-size: 1em;
-    background-color: #2e3a59;
+    margin: 40px auto 0;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    background: var(--accent-gradient);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+    display: block;
+    letter-spacing: 0.5px;
 }
 
 .voltar-btn:hover {
-    background-color: #1d2742;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
 }
 
 #toggle-theme {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 1.6rem;
+    top: 25px;
+    right: 25px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
     cursor: pointer;
     color: white;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
     z-index: 10;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #toggle-theme:hover {
-    color: #a0cfff;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
 }
 
 :root {
-    --bg-color: #f4f7fa;
-    --text-color: #222222;
-    --card-bg: #ffffff;
-    --card-hover-bg: #eef5ff;
-    --accent-color: #0077ff;
-    --accent-hover: #005fcc;
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --text-color: #2c3e50;
+    --heading-color: #34495e;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-hover-bg: rgba(255, 255, 255, 1);
+    --card-border: rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --accent-color: #667eea;
+    --accent-hover: #5a6fd8;
 }
 
 body.dark {
-    --bg-color: #1e1e1e;
-    --text-color: #eeeeee;
-    --card-bg: #2c2c2c;
-    --card-hover-bg: #3a3a4a;
-    --accent-color: #66ccff;
-    --accent-hover: #3399ff;
+    --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    --text-color: #ecf0f1;
+    --heading-color: #f8f9fa;
+    --card-bg: rgba(52, 73, 94, 0.9);
+    --card-hover-bg: rgba(44, 62, 80, 0.95);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    --accent-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    --accent-color: #74b9ff;
+    --accent-hover: #0984e3;
 }
 
 #quiz-container {
-    max-width: 600px;
+    max-width: 700px;
     margin: 40px auto;
     background: var(--card-bg);
-    padding: 30px 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: var(--card-shadow);
     color: var(--text-color);
     font-size: 1.1em;
-    line-height: 1.5;
+    line-height: 1.6;
     user-select: none;
+    border: 1px solid var(--card-border);
+}
+
+#quiz-title {
+    color: var(--heading-color);
+    font-size: 2.2em;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
 }
 
 .btn-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
 }
 
 button.answer-btn {
-    padding: 14px 16px;
+    padding: 18px 20px;
     font-size: 1.05em;
-    border-radius: 10px;
-    border: 2.5px solid var(--accent-color);
-    background-color: transparent;
+    border-radius: 15px;
+    border: 2px solid var(--accent-color);
+    background: transparent;
     cursor: pointer;
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease,
-        box-shadow 0.3s ease,
-        transform 0.15s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--accent-color);
-    box-shadow: inset 0 0 0 transparent;
     text-align: center;
     font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+button.answer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--accent-gradient);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+button.answer-btn:hover:not(:disabled)::before {
+    left: 0;
 }
 
 button.answer-btn:hover:not(:disabled) {
-    background-color: var(--accent-color);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 119, 255, 0.4);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
 
 button.answer-btn:focus-visible {
@@ -183,24 +292,112 @@ button.answer-btn:disabled {
 #next-btn,
 #finish-btn,
 #voltar-btn-quiz {
-    margin-top: 30px;
-    padding: 14px 28px;
-    background-color: var(--accent-color);
+    margin-top: 35px;
+    padding: 16px 32px;
+    background: var(--accent-gradient);
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 50px;
     cursor: pointer;
     font-weight: 600;
     font-size: 1.1em;
-    box-shadow: 0 6px 16px rgba(0, 119, 255, 0.5);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
 }
 
 #next-btn:hover,
 #finish-btn:hover,
 #voltar-btn-quiz:hover {
-    background-color: var(--accent-hover);
-    box-shadow: 0 8px 24px rgba(51, 153, 255, 0.7);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+}
+
+/* Animação de entrada para os cards */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: slideInUp 0.6s ease forwards;
+}
+
+.card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* Responsividade melhorada */
+@media (max-width: 768px) {
+    .content {
+        padding: 20px 15px;
+    }
+
+    header {
+        padding: 20px 15px;
+        font-size: 1.5em;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        padding: 25px 20px;
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    #toggle-theme {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+}
+
+button.answer-btn.correct {
+    background: #4CAF50 !important;
+    color: white !important;
+    border-color: #4CAF50 !important;
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5) !important;
+    cursor: default;
+    transform: none !important;
+}
+
+button.answer-btn.wrong {
+    background: #f44336 !important;
+    color: white !important;
+    border-color: #f44336 !important;
+    box-shadow: 0 4px 16px rgba(244, 67, 54, 0.5) !important;
+    cursor: default;
+    transform: none !important;
+}
+
+button.answer-btn:disabled {
+    cursor: default;
+    opacity: 0.85;
 }
 
 .answer-btn.correta {

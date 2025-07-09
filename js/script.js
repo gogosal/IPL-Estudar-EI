@@ -206,29 +206,37 @@ let score = 0;
 
 function abrirSemestre(semestre) {
     const grid = document.getElementById('disciplinas');
-    const voltarBtn = document.querySelector('.voltar-btn');
     const semestres = document.getElementById('semestres');
 
     grid.innerHTML = '';
 
-    disciplinasPorSemestre[semestre].forEach(disciplina => {
+    disciplinasPorSemestre[semestre].forEach((disciplina, index) => {
         const card = document.createElement('div');
         card.className = 'card';
+
+        // Adicionar delay de animação
+        card.style.animationDelay = `${(index + 1) * 0.1}s`;
+
+        // Criar container para o ícone
+        const cardIcon = document.createElement('div');
+        cardIcon.className = 'card-icon';
 
         // Criar o ícone FontAwesome
         const icon = document.createElement('i');
         icon.className = `fas ${disciplina.icon}`;
-        icon.style.marginRight = '8px'; // espaçamento
+
+        cardIcon.appendChild(icon);
 
         // Criar o texto da disciplina
-        const texto = document.createElement('span');
+        const texto = document.createElement('div');
         texto.textContent = disciplina.nome;
+        texto.style.marginTop = '10px';
 
         // Adicionar evento de clique para abrir o quiz
         card.addEventListener('click', () => abrirQuiz(disciplina.nome));
 
         // Adicionar ícone + texto no card
-        card.appendChild(icon);
+        card.appendChild(cardIcon);
         card.appendChild(texto);
 
         grid.appendChild(card);
@@ -236,7 +244,6 @@ function abrirSemestre(semestre) {
 
     semestres.classList.add('hidden');
     grid.classList.remove('hidden');
-    voltarBtn.classList.remove('hidden');
 }
 
 function voltarParaSemestres() {
@@ -250,17 +257,15 @@ function abrirQuiz(disciplina) {
     currentQuiz = quizzesPorDisciplina[disciplina] || [];
     currentQuestionIndex = 0;
     score = 0;
-    mostrarPergunta(); // ← nome correto
+    mostrarPergunta();
 
     document.getElementById('semestres').classList.add('hidden');
     document.getElementById('disciplinas').classList.add('hidden');
-    document.querySelector('.voltar-btn').classList.add('hidden');
 
-    // Mostrar o novo wrapper
+    // Mostrar o wrapper do quiz
     document.getElementById('quiz-wrapper').classList.remove('hidden');
     quizContainer.classList.remove('hidden');
     document.getElementById('quiz-nav').classList.remove('hidden');
-
 
     // Criar botões de navegação
     const navContainer = document.getElementById('quiz-nav-buttons');
@@ -269,11 +274,32 @@ function abrirQuiz(disciplina) {
     currentQuiz.forEach((_, index) => {
         const btn = document.createElement('button');
         btn.textContent = index + 1;
-        btn.style.padding = '5px 10px';
-        btn.style.border = '1px solid #ccc';
-        btn.style.borderRadius = '4px';
-        btn.style.backgroundColor = '#e0e0e0';
-        btn.style.cursor = 'pointer';
+        btn.style.cssText = `
+            padding: 8px 12px;
+            margin: 2px;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            background-color: transparent;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 35px;
+        `;
+
+        btn.addEventListener('mouseenter', () => {
+            if (btn.style.backgroundColor !== 'rgb(76, 175, 80)' && btn.style.backgroundColor !== 'rgb(244, 67, 54)') {
+                btn.style.backgroundColor = 'var(--accent-color)';
+                btn.style.color = 'white';
+            }
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            if (btn.style.backgroundColor !== 'rgb(76, 175, 80)' && btn.style.backgroundColor !== 'rgb(244, 67, 54)') {
+                btn.style.backgroundColor = 'transparent';
+                btn.style.color = 'var(--accent-color)';
+            }
+        });
 
         btn.addEventListener('click', () => {
             currentQuestionIndex = index;
@@ -322,9 +348,9 @@ function selecionarResposta(e) {
     Array.from(answerButtons.children).forEach(button => {
         button.disabled = true;
         if (button.dataset.correta === 'true') {
-            button.classList.add('correta');
+            button.classList.add('correct');
         } else {
-            button.classList.add('incorreta');
+            button.classList.add('wrong');
         }
     });
 
@@ -360,10 +386,18 @@ finishBtn.addEventListener('click', () => {
 });
 
 voltarBtnQuiz.addEventListener('click', () => {
+    // Esconder elementos do quiz
+    document.getElementById('quiz-wrapper').classList.add('hidden');
     quizContainer.classList.add('hidden');
+    document.getElementById('quiz-nav').classList.add('hidden');
+
+    // Resetar estado
     answerButtons.classList.remove('hidden');
     scoreText.classList.add('hidden');
-    document.getElementById('quiz-nav').classList.add('hidden');
+    nextBtn.classList.add('hidden');
+    finishBtn.classList.add('hidden');
+
+    // Mostrar página inicial
     document.getElementById('semestres').classList.remove('hidden');
 });
 
