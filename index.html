@@ -58,6 +58,9 @@
             </section>
         </div>
 
+        <!-- Botão de Voltar Universal -->
+        <button class="voltar-btn hidden" id="botao-voltar" onclick="voltarAnterior()">← Voltar</button>
+
         <!-- Disciplinas -->
         <section class="grid hidden" id="disciplinas"></section>
 
@@ -65,10 +68,10 @@
         <section class="grid hidden" id="testes"></section>
 
         <!-- Quiz Wrapper -->
-        <section id="quiz-wrapper" class="hidden" style="display: flex; gap: 30px; align-items: flex-start;">
+        <section id="quiz-wrapper" class="hidden">
 
             <!-- Container do Quiz -->
-            <div id="quiz-container" class="hidden" style="flex: 2;">
+            <div id="quiz-container" class="hidden">
                 <h2 id="quiz-title">Quiz</h2>
                 <div id="question-container">
                     <p id="question-text"></p>
@@ -76,15 +79,15 @@
                 </div>
                 <button id="next-btn" class="hidden">Próxima</button>
                 <button id="finish-btn" class="hidden">Terminar Quiz</button>
-                <button id="voltar-btn-quiz">← Voltar</button>
+                <button id="voltar-btn-quiz" class="hidden">← Voltar</button>
                 <p id="score-text" class="hidden"></p>
+                <!-- Os botões de navegação personalizados serão criados dinamicamente aqui -->
             </div>
 
             <!-- Navegação do Quiz -->
-            <div id="quiz-nav" class="hidden"
-                style="flex: 1; border: 1px solid #ccc; border-radius: 6px; padding: 10px; max-width: 300px; font-size: 14px;">
-                <h3 style="margin-top: 0; font-size: 16px;">Navegação do teste</h3>
-                <div id="quiz-nav-buttons" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+            <div id="quiz-nav" class="hidden">
+                <h3>Navegação do teste</h3>
+                <div id="quiz-nav-buttons"></div>
             </div>
         </section>
 

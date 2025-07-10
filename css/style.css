@@ -27,7 +27,7 @@ header h1 {
 }
 
 .content {
-    padding: 40px 30px;
+    padding: 20px 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -95,7 +95,7 @@ header h1 {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 h2 {
@@ -132,8 +132,11 @@ h2::after {
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     font-weight: 600;
-    display: block;
     letter-spacing: 0.5px;
+}
+
+.voltar-btn:not(.hidden) {
+    display: block;
 }
 
 .voltar-btn:hover {
@@ -193,6 +196,49 @@ body.dark {
     --accent-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
     --accent-color: #74b9ff;
     --accent-hover: #0984e3;
+}
+
+/* ====================================
+   LAYOUT DO QUIZ
+   ==================================== */
+
+#quiz-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#quiz-nav {
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    margin-top: 40px;
+    padding: 15px;
+    max-width: 280px;
+    min-width: 250px;
+    font-size: 14px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    position: sticky;
+    top: 20px;
+}
+
+#quiz-nav h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: var(--heading-color);
+    text-align: center;
+}
+
+#quiz-nav-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
 }
 
 #quiz-container {
@@ -311,6 +357,43 @@ button.answer-btn:disabled {
 #voltar-btn-quiz:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+}
+
+/* Botões de navegação numerados do quiz */
+.quiz-nav-btn {
+    padding: 8px 12px;
+    margin: 2px;
+    border: 2px solid var(--accent-color);
+    border-radius: 8px;
+    background-color: transparent;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 35px;
+    font-size: 14px;
+}
+
+.quiz-nav-btn:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.quiz-nav-btn.correct {
+    background-color: #4CAF50 !important;
+    color: white !important;
+    border-color: #4CAF50;
+}
+
+.quiz-nav-btn.wrong {
+    background-color: #f44336 !important;
+    color: white !important;
+    border-color: #f44336;
+}
+
+.quiz-nav-btn.correct:hover,
+.quiz-nav-btn.wrong:hover {
+    opacity: 0.8;
 }
 
 /* Animação de entrada para os cards */

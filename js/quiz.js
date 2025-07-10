@@ -11,6 +11,11 @@ const finishBtn = document.getElementById('finish-btn');
 const voltarBtnQuiz = document.getElementById('voltar-btn-quiz');
 const scoreText = document.getElementById('score-text');
 
+// Novos elementos de navegação
+let anteriorBtn = null;
+let proximaBtn = null;
+let sairQuizBtn = null;
+
 // Estado atual do quiz
 let currentQuiz = [];
 let currentQuestionIndex = 0;
@@ -22,6 +27,9 @@ let score = 0;
  * @param {string} nomeDoTeste - Nome do teste
  */
 function abrirQuiz(disciplina, nomeDoTeste) {
+    // Atualizar estado da navegação
+    estadoAtual = 'quiz';
+
     // Configurar o quiz
     document.getElementById('quiz-title').textContent = `${disciplina} - ${nomeDoTeste}`;
     currentQuiz = quizzesPorDisciplina[disciplina]?.[nomeDoTeste] || [];
@@ -39,8 +47,14 @@ function abrirQuiz(disciplina, nomeDoTeste) {
     quizContainer.classList.remove('hidden');
     document.getElementById('quiz-nav').classList.remove('hidden');
 
+    // Esconder botão de voltar universal (quiz tem seu próprio botão)
+    document.getElementById('botao-voltar').classList.add('hidden');
+
     // Criar navegação do quiz
     criarNavegacaoQuiz();
+
+    // Criar botões de navegação personalizados
+    criarBotoesNavegacao();
 }
 
 /**
@@ -62,6 +76,9 @@ function mostrarPergunta() {
         const button = criarBotaoResposta(resposta);
         answerButtons.appendChild(button);
     });
+
+    // Atualizar visibilidade dos botões de navegação
+    atualizarBotoesNavegacao();
 }
 
 /**
@@ -102,10 +119,8 @@ function selecionarResposta(e) {
     // Atualizar navegação visual
     atualizarNavegacaoVisual(correta);
 
-    // Mostrar botão apropriado
-    if (currentQuestionIndex < currentQuiz.length - 1) {
-        nextBtn.classList.remove('hidden');
-    } else {
+    // Mostrar botão de finalizar se for a última pergunta
+    if (currentQuestionIndex === currentQuiz.length - 1) {
         finishBtn.classList.remove('hidden');
     }
 }
@@ -117,15 +132,24 @@ function selecionarResposta(e) {
 function atualizarNavegacaoVisual(correta) {
     const navButtons = document.getElementById('quiz-nav-buttons').children;
     const navBtn = navButtons[currentQuestionIndex];
-    navBtn.style.backgroundColor = correta ? '#4CAF50' : '#f44336';
-    navBtn.style.color = 'white';
+    
+    if (navBtn) {
+        // Remover classes anteriores
+        navBtn.classList.remove('correct', 'wrong');
+        
+        // Adicionar classe baseada na resposta
+        if (correta) {
+            navBtn.classList.add('correct');
+        } else {
+            navBtn.classList.add('wrong');
+        }
+    }
 }
 
 /**
  * Reseta o estado visual do quiz
  */
 function resetarEstadoQuiz() {
-    nextBtn.classList.add('hidden');
     finishBtn.classList.add('hidden');
     scoreText.classList.add('hidden');
 
@@ -149,16 +173,36 @@ function criarNavegacaoQuiz() {
 }
 
 /**
- * Cria um botão de navegação numerado
- * @param {number} index - Índice da pergunta
- * @returns {HTMLElement} Botão de navegação
+ * Cria os botões de navegação personalizados
  */
-function criarBotaoNavegacao(index) {
-    const btn = document.createElement('button');
-    btn.textContent = index + 1;
-    btn.style.cssText = `
-        padding: 8px 12px;
-        margin: 2px;
+function criarBotoesNavegacao() {
+    const quizContainer = document.getElementById('quiz-container');
+
+    // Remover botões existentes se houver
+    if (anteriorBtn) anteriorBtn.remove();
+    if (proximaBtn) proximaBtn.remove();
+    if (sairQuizBtn) sairQuizBtn.remove();
+
+    // Criar container para os botões de navegação
+    let navContainer = document.getElementById('quiz-nav-container');
+    if (!navContainer) {
+        navContainer = document.createElement('div');
+        navContainer.id = 'quiz-nav-container';
+        navContainer.style.cssText = `
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        `;
+        quizContainer.appendChild(navContainer);
+    }
+
+    // Botão Anterior
+    anteriorBtn = document.createElement('button');
+    anteriorBtn.textContent = '← Anterior';
+    anteriorBtn.className = 'btn-secondary';
+    anteriorBtn.style.cssText = `
+        padding: 10px 20px;
         border: 2px solid var(--accent-color);
         border-radius: 8px;
         background-color: transparent;
@@ -166,25 +210,109 @@ function criarBotaoNavegacao(index) {
         cursor: pointer;
         font-weight: 600;
         transition: all 0.3s ease;
-        min-width: 35px;
     `;
+    anteriorBtn.addEventListener('click', irParaAnterior);
 
-    // Efeitos de hover
-    btn.addEventListener('mouseenter', () => {
-        if (!btn.style.backgroundColor.includes('rgb(76, 175, 80)') &&
-            !btn.style.backgroundColor.includes('rgb(244, 67, 54)')) {
-            btn.style.backgroundColor = 'var(--accent-color)';
-            btn.style.color = 'white';
-        }
-    });
+    // Botão Próxima
+    proximaBtn = document.createElement('button');
+    proximaBtn.textContent = 'Próxima →';
+    proximaBtn.className = 'btn-primary';
+    proximaBtn.style.cssText = `
+        padding: 10px 20px;
+        border: 2px solid var(--accent-color);
+        border-radius: 8px;
+        background-color: var(--accent-color);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    `;
+    proximaBtn.addEventListener('click', irParaProxima);
 
-    btn.addEventListener('mouseleave', () => {
-        if (!btn.style.backgroundColor.includes('rgb(76, 175, 80)') &&
-            !btn.style.backgroundColor.includes('rgb(244, 67, 54)')) {
-            btn.style.backgroundColor = 'transparent';
-            btn.style.color = 'var(--accent-color)';
-        }
-    });
+    // Botão Sair do Quiz
+    sairQuizBtn = document.createElement('button');
+    sairQuizBtn.textContent = '✕ Sair do Quiz';
+    sairQuizBtn.className = 'btn-danger';
+    sairQuizBtn.style.cssText = `
+        padding: 10px 20px;
+        border: 2px solid #f44336;
+        border-radius: 8px;
+        background-color: transparent;
+        color: #f44336;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-left: auto;
+    `;
+    sairQuizBtn.addEventListener('click', voltarDoQuiz);
+
+    // Adicionar botões ao container
+    navContainer.appendChild(anteriorBtn);
+    navContainer.appendChild(proximaBtn);
+    navContainer.appendChild(sairQuizBtn);
+
+    // Atualizar estado inicial
+    atualizarBotoesNavegacao();
+}
+
+/**
+ * Atualiza a visibilidade e estado dos botões de navegação
+ */
+function atualizarBotoesNavegacao() {
+    if (!anteriorBtn || !proximaBtn) return;
+
+    // Botão Anterior - desabilitado na primeira pergunta
+    if (currentQuestionIndex === 0) {
+        anteriorBtn.disabled = true;
+        anteriorBtn.style.opacity = '0.5';
+        anteriorBtn.style.cursor = 'not-allowed';
+    } else {
+        anteriorBtn.disabled = false;
+        anteriorBtn.style.opacity = '1';
+        anteriorBtn.style.cursor = 'pointer';
+    }
+
+    // Botão Próxima - sempre habilitado, exceto na última pergunta
+    if (currentQuestionIndex === currentQuiz.length - 1) {
+        proximaBtn.disabled = true;
+        proximaBtn.style.opacity = '0.5';
+        proximaBtn.style.cursor = 'not-allowed';
+    } else {
+        proximaBtn.disabled = false;
+        proximaBtn.style.opacity = '1';
+        proximaBtn.style.cursor = 'pointer';
+    }
+}
+
+/**
+ * Navega para a pergunta anterior
+ */
+function irParaAnterior() {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        mostrarPergunta();
+    }
+}
+
+/**
+ * Navega para a próxima pergunta
+ */
+function irParaProxima() {
+    if (currentQuestionIndex < currentQuiz.length - 1) {
+        currentQuestionIndex++;
+        mostrarPergunta();
+    }
+}
+
+/**
+ * Cria um botão de navegação numerado
+ * @param {number} index - Índice da pergunta
+ * @returns {HTMLElement} Botão de navegação
+ */
+function criarBotaoNavegacao(index) {
+    const btn = document.createElement('button');
+    btn.textContent = index + 1;
+    btn.className = 'quiz-nav-btn';
 
     // Navegação para pergunta específica
     btn.addEventListener('click', () => {
@@ -217,7 +345,7 @@ function finalizarQuiz() {
 }
 
 /**
- * Volta para a página inicial (semestres)
+ * Volta para a página de testes
  */
 function voltarDoQuiz() {
     // Esconder elementos do quiz
@@ -231,15 +359,26 @@ function voltarDoQuiz() {
     nextBtn.classList.add('hidden');
     finishBtn.classList.add('hidden');
 
-    // Mostrar página inicial
-    document.getElementById('semestres').classList.remove('hidden');
+    // Remover botões de navegação personalizados
+    if (anteriorBtn) anteriorBtn.remove();
+    if (proximaBtn) proximaBtn.remove();
+    if (sairQuizBtn) sairQuizBtn.remove();
+    const navContainer = document.getElementById('quiz-nav-container');
+    if (navContainer) navContainer.remove();
+
+    // Voltar para a página de testes
+    document.getElementById('testes').classList.remove('hidden');
+    document.getElementById('botao-voltar').classList.remove('hidden');
+
+    // Atualizar estado da navegação
+    estadoAtual = 'testes';
 }
 
 // ====================================
 // EVENT LISTENERS
 // ====================================
 
-// Botão "Próxima pergunta"
+// Botão "Próxima pergunta" (mantido para compatibilidade)
 nextBtn.addEventListener('click', () => {
     currentQuestionIndex++;
     mostrarPergunta();
@@ -248,5 +387,5 @@ nextBtn.addEventListener('click', () => {
 // Botão "Finalizar quiz"
 finishBtn.addEventListener('click', finalizarQuiz);
 
-// Botão "Voltar" do quiz
-voltarBtnQuiz.addEventListener('click', voltarDoQuiz);
+// Botão "Voltar" do quiz - agora funciona como "Anterior"
+voltarBtnQuiz.addEventListener('click', irParaAnterior);

@@ -16,7 +16,7 @@ function abrirSemestre(semestre) {
     estadoAtual = 'disciplinas';
 
     const grid = document.getElementById('disciplinas');
-    const voltarBtn = document.getElementById('voltar-btn');
+    const botaoVoltar = document.getElementById('botao-voltar');
     const semestres = document.getElementById('semestres');
 
     grid.innerHTML = '';
@@ -39,6 +39,7 @@ function abrirSemestre(semestre) {
     // Navegação
     semestres.classList.add('hidden');
     grid.classList.remove('hidden');
+    botaoVoltar.classList.remove('hidden'); // Mostrar botão de voltar
 }
 
 /**
@@ -50,7 +51,6 @@ function abrirTestes(disciplina) {
     estadoAtual = 'testes';
 
     const grid = document.getElementById('testes');
-    const voltarBtn = document.getElementById('voltar-btn');
     const disciplinas = document.getElementById('disciplinas');
 
     grid.innerHTML = '';
@@ -74,20 +74,21 @@ function abrirTestes(disciplina) {
     // Navegação
     disciplinas.classList.add('hidden');
     grid.classList.remove('hidden');
+    // Botão de voltar continua visível
 }
 
 /**
  * Função universal de voltar que funciona baseada no estado atual
  */
-function voltarNivel() {
-    const voltarBtn = document.getElementById('voltar-btn');
+function voltarAnterior() {
+    const botaoVoltar = document.getElementById('botao-voltar');
 
     switch (estadoAtual) {
         case 'disciplinas':
             // Voltar para semestres
             document.getElementById('disciplinas').classList.add('hidden');
             document.getElementById('semestres').classList.remove('hidden');
-            voltarBtn.classList.add('hidden');
+            botaoVoltar.classList.add('hidden');
             estadoAtual = 'semestres';
             break;
 
@@ -103,7 +104,7 @@ function voltarNivel() {
             // Voltar para testes
             esconderQuiz();
             document.getElementById('testes').classList.remove('hidden');
-            voltarBtn.classList.remove('hidden');
+            botaoVoltar.classList.remove('hidden');
             estadoAtual = 'testes';
             break;
     }
